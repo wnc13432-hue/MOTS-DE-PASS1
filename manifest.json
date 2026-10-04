@@ -1,0 +1,35 @@
+{
+  "name": "الخزنة — مدير كلمات المرور",
+  "short_name": "الخزنة",
+  "description": "تخزين آمن لكلمات المرور، مشفّر بكلمة مرور رئيسية تعرفها أنت فقط. يعمل محليًا في متصفحك دون أي خادم.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#0E1420",
+  "theme_color": "#0E1420",
+  "categories": ["productivity", "security", "utilities"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "قفل الخزنة",
+      "short_name": "قفل",
+      "description": "إغلاق الخزنة فورًا",
+      "url": "./?action=lock"
+    },
+    {
+      "name": "نسخة احتياطية",
+      "short_name": "نسخ احتياطي",
+      "description": "حفظ نسخة احتياطية مشفّرة من الخزنة",
+      "url": "./?action=backup"
+    }
+  ]
+}

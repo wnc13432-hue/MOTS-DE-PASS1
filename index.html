@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>الخزنة</title>
+<meta name="theme-color" content="#0E1420" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F3F5F8" media="(prefers-color-scheme: light)">
+
+<!-- PWA -->
+<link rel="manifest" href="./manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="الخزنة">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
+
+<style>
+:root{
+  --bg:#0E1420; --panel:#161F2E; --panel2:#1C273A; --line:#28334A;
+  --text:#E7ECF3; --muted:#8C9BB3; --accent:#49D6B8; --accent-dim:#1F4A42;
+  --danger:#E8716B; --mono:'SF Mono',Consolas,'Courier New',monospace;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#F3F5F8; --panel:#FFFFFF; --panel2:#F0F3F7; --line:#DEE3EA;
+    --text:#131A26; --muted:#5B6B82; --accent:#0E8F74; --accent-dim:#D7F2EA;
+    --danger:#C0392B;
+  }
+}
+*{box-sizing:border-box;}
+html,body{height:100%;margin:0;}
+body{
+  color:var(--text); font-family:var(--sans);
+  display:flex; align-items:center; justify-content:center; min-height:100%;
+  padding:24px;
+  background-color:var(--bg);
+  background-image:
+    linear-gradient(rgba(14,20,32,.82), rgba(14,20,32,.82)),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'><g transform='translate(300,0) scale(-1,1)'><rect width='150' height='200' fill='%23006233'/><rect x='150' width='150' height='200' fill='%23ffffff'/><g fill='%23D21034'><path d='M160 100a35 35 0 1 1 10.5 25A28 28 0 1 0 160 100z'/><path d='M160 100l17.6-5.7-10.9-15 18.5 2.7-2.7-18.5 15 10.9 5.7-17.6 5.7 17.6 15-10.9-2.7 18.5 18.5-2.7-10.9 15 17.6 5.7-17.6 5.7 10.9 15-18.5-2.7 2.7 18.5-15-10.9-5.7 17.6-5.7-17.6-15 10.9 2.7-18.5-18.5 2.7 10.9-15z' transform='translate(0 0) scale(0.22) translate(255 -45)'/></g></g></svg>");
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+  background-repeat:no-repeat;
+}
+@media (prefers-color-scheme: light){
+  body:not([data-theme="dark"]){
+    background-image:
+      linear-gradient(rgba(243,245,248,.85), rgba(243,245,248,.85)),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'><g transform='translate(300,0) scale(-1,1)'><rect width='150' height='200' fill='%23006233'/><rect x='150' width='150' height='200' fill='%23ffffff'/><g fill='%23D21034'><path d='M160 100a35 35 0 1 1 10.5 25A28 28 0 1 0 160 100z'/><path d='M160 100l17.6-5.7-10.9-15 18.5 2.7-2.7-18.5 15 10.9 5.7-17.6 5.7 17.6 15-10.9-2.7 18.5 18.5-2.7-10.9 15 17.6 5.7-17.6 5.7 10.9 15-18.5-2.7 2.7 18.5-15-10.9-5.7 17.6-5.7-17.6-15 10.9 2.7-18.5-18.5 2.7 10.9-15z' transform='translate(0 0) scale(0.22) translate(255 -45)'/></g></g></svg>");
+  }
+}
+.wrap{width:100%; max-width:480px;}
+h1{font-size:1.4rem; font-weight:700; margin:0 0 4px;}
+.sub{color:var(--muted); font-size:.9rem; margin:0 0 28px;}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:28px;}
+label{display:block; font-size:.82rem; color:var(--muted); margin:0 0 6px;}
+input[type=password],input[type=text]{
+  width:100%; background:var(--panel2); border:3px solid var(--line); color:var(--text);
+  padding:12px 14px; border-radius:9px; font-size:1rem; font-family:var(--mono);
+  margin-bottom:16px;
+}
+input:focus{outline:2px solid var(--accent); outline-offset:1px;}
+button{
+  font-family:var(--sans); font-size:.95rem; font-weight:600; cursor:pointer;
+  border-radius:9px; border:none; padding:12px 18px;
+}
+.btn-primary{background:var(--accent); color:#06231D; width:100%;}
+.btn-primary:hover{filter:brightness(1.08);}
+.btn-ghost{background:transparent; color:var(--muted); border:1px solid var(--line);}
+.btn-ghost:hover{color:var(--text); border-color:var(--muted);}
+.btn-danger{background:transparent; color:var(--danger); border:1px solid var(--danger);}
+.err{color:var(--danger); font-size:.85rem; min-height:1.2em; margin:-8px 0 14px;}
+.hint{color:var(--muted); font-size:.78rem; margin-top:10px; line-height:1.5;}
+#app{display:none;}
+.topbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;}
+.topbar h1{margin:0;}
+.entries{display:flex; flex-direction:column; gap:10px; margin-bottom:18px;}
+.entry{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px;}
+.entry-top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
+.entry-site{font-weight:700; font-size:1rem;}
+.entry-user{color:var(--muted); font-size:.85rem; margin-top:2px;}
+.entry-pass{
+  font-family:var(--mono); background:var(--panel2); border-radius:7px; padding:8px 10px;
+  margin-top:10px; display:flex; justify-content:space-between; align-items:center; gap:8px;
+  font-size:.9rem; letter-spacing:.5px;
+}
+.icon-btn{
+  background:transparent; border:none; color:var(--muted); padding:4px 7px; font-size:.95rem;
+}
+.icon-btn:hover{color:var(--accent);}
+.entry-actions{display:flex; gap:6px;}
+.empty{color:var(--muted); text-align:center; padding:40px 10px; font-size:.9rem;}
+.form-row{display:flex; gap:10px;}
+.form-row>div{flex:1;}
+.gen-row{display:flex; gap:8px; margin-bottom:16px;}
+.gen-row input{margin-bottom:0; flex:1; border:3px solid #000; }
+.modal-bg{
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,.5);
+  align-items:center; justify-content:center; padding:20px; z-index:10;
+}
+.modal{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:24px; width:100%; max-width:420px;}
+.modal h2{margin:0 0 18px; font-size:1.1rem;}
+.modal-actions{display:flex; gap:10px; margin-top:6px;}
+.modal-actions button{flex:1;}
+.lock-link{color:var(--muted); font-size:.85rem; background:none; border:none; cursor:pointer; text-decoration:underline; padding:0;}
+.toast{
+  position:fixed; bottom:calc(24px + env(safe-area-inset-bottom,0px)); left:50%; transform:translateX(-50%);
+  background:var(--accent); color:#06231D; padding:10px 18px; border-radius:20px;
+  font-size:.85rem; font-weight:600; opacity:0; transition:opacity .25s; pointer-events:none;
+}
+.toast.show{opacity:1;}
+/* install banner */
+#installBanner{
+  display:none; position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  transform:translateX(-50%); background:var(--panel); border:1px solid var(--line);
+  border-radius:14px; padding:12px 14px; box-shadow:0 8px 24px rgba(0,0,0,.4);
+  z-index:20; max-width:440px; width:calc(100% - 32px);
+  align-items:center; gap:12px;
+}
+#installBanner.show{display:flex;}
+#installBanner .ib-text{flex:1; font-size:.82rem; line-height:1.4;}
+#installBanner .ib-text strong{display:block; font-size:.92rem; margin-bottom:2px;}
+.ib-yes{background:var(--accent); color:#06231D; border:none; padding:8px 14px; border-radius:8px; font-weight:600; font-size:.85rem;}
+.ib-no{background:transparent; color:var(--muted); border:none; padding:8px 10px; font-size:.85rem;}
+/* offline indicator */
+#offlineDot{
+  position:fixed; top:calc(8px + env(safe-area-inset-top,0px)); left:50%; transform:translateX(-50%);
+  background:var(--danger); color:#fff; padding:4px 12px; border-radius:0 0 10px 10px;
+  font-size:.72rem; font-weight:600; display:none; z-index:30;
+}
+#offlineDot.show{display:block;}
+</style>
+</head>
+<body>
+
+<div id="offlineDot">غير متصل — وضع Offline</div>
+
+<div class="wrap" id="auth">
+  <h1>🔐 الخزنة</h1>
+  <p class="sub" id="authSub">تخزين آمن لكلمات المرور، مشفّر بكلمة مرور رئيسية تعرفها أنت فقط.</p>
+  <div class="card">
+    <input type="file" id="restoreFile" accept=".json,application/json" style="display:none" onchange="doRestore(event)">
+    <div id="setupView" style="display:none">
+      <label for="newMaster">أنشئ كلمة مرور رئيسية</label>
+      <input type="password" id="newMaster" placeholder="••••••••">
+      <label for="confirmMaster">أكّدها</label>
+      <input type="password" id="confirmMaster" placeholder="••••••••">
+      <div class="err" id="setupErr"></div>
+      <button class="btn-primary" onclick="doSetup()">إنشاء الخزنة</button>
+      <p class="hint">لا توجد طريقة لاسترجاع هذه الكلمة إذا نسيتها — فهي لا تُخزَّن في أي مكان، وتُستخدم فقط لاشتقاق مفتاح التشفير محليًا في متصفحك.</p>
+      <p class="hint">لديك نسخة احتياطية؟ <button class="lock-link" onclick="document.getElementById('restoreFile').click()">استردها من ملف</button></p>
+    </div>
+    <div id="loginView" style="display:none">
+      <label for="loginMaster">كلمة المرور الرئيسية</label>
+      <input type="password" id="loginMaster" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      <div class="err" id="loginErr"></div>
+      <button class="btn-primary" onclick="doLogin()">فتح الخزنة</button>
+      <p class="hint"><button class="lock-link" onclick="document.getElementById('restoreFile').click()">استرداد من ملف نسخة احتياطية</button></p>
+    </div>
+  </div>
+  <p class="hint" id="restoreMsg"></p>
+</div>
+
+<div class="wrap" id="app">
+  <div class="topbar">
+    <h1>🔐 الخزنة</h1>
+    <div style="display:flex; gap:14px; align-items:center;">
+      <button class="lock-link" id="backupBtn" onclick="doBackup()" style="display:none">SAUVEGARDER</button>
+      <button class="lock-link" onclick="lockVault()">قفل</button>
+    </div>
+  </div>
+  <div class="gen-row">
+    <input type="text" id="newSite" placeholder="اسم الموقع / الحساب">
+  </div>
+  <div class="gen-row">
+    <input type="text" id="newName" placeholder="الاسم الكامل">
+  </div>
+  <div class="gen-row">
+    <input type="text" id="newUser" placeholder="اسم المستخدم / البريد">
+  </div>
+  <div class="gen-row">
+    <input type="text" id="newPhone" placeholder="رقم الهاتف">
+  </div>
+  <div class="gen-row">
+    <input type="text" id="newPass" placeholder="كلمة المرور">
+    <button class="btn-ghost" onclick="genPassword()">توليد</button>
+  </div>
+  <button class="btn-primary" onclick="addEntry()" style="margin-bottom:22px">إضافة إلى الخزنة</button>
+  <div class="entries" id="entries"></div>
+</div>
+
+<!-- install banner -->
+<div id="installBanner">
+  <div class="ib-text">
+    <strong>تثبيت الخزنة</strong>
+    ثبّت التطبيق على جهازك للوصول السريع وعمل دون اتصال.
+  </div>
+  <button class="ib-yes" id="ibYes">تثبيت</button>
+  <button class="ib-no" id="ibNo">لاحققا</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const LS_KEY = 'vault_blob_v1';
+let cryptoKey = null, vault = [];
+let deferredPrompt = null;        // for beforeinstallprompt
+let downloadsCap = null;
+(async()=>{ try{ downloadsCap = await claude.use('downloads'); }catch(e){ downloadsCap = null; } })();
+
+function b64e(buf){return btoa(String.fromCharCode(...new Uint8Array(buf)));}
+function b64d(str){return Uint8Array.from(atob(str), c=>c.charCodeAt(0));}
+
+async function deriveKey(password, saltB64){
+  const salt = b64d(saltB64);
+  const baseKey = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    {name:'PBKDF2', salt, iterations:250000, hash:'SHA-256'},
+    baseKey, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']
+  );
+}
+
+async function encryptVault(){
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const data = new TextEncoder().encode(JSON.stringify(vault));
+  const ct = await crypto.subtle.encrypt({name:'AES-GCM', iv}, cryptoKey, data);
+  return {iv:b64e(iv), ct:b64e(ct)};
+}
+
+function loadStore(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+function saveStore(obj){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(obj)); return true; }
+  catch(e){ console.error('storage failed', e); return false; }
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1600);
+}
+
+/* ---------- PWA: register external service worker (no more Blob URL) ---------- */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => { console.log('[PWA] SW registered', reg.scope); })
+      .catch(err => { console.warn('[PWA] SW registration failed', err); });
+  });
+}
+
+/* ---------- PWA: offline indicator ---------- */
+function updateOnline(){ document.getElementById('offlineDot').classList.toggle('show', !navigator.onLine); }
+window.addEventListener('online',  ()=>updateOnline());
+window.addEventListener('offline', ()=>updateOnline());
+updateOnline();
+
+/* ---------- PWA: install prompt handling ---------- */
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').classList.add('show');
+});
+document.getElementById('ibYes').addEventListener('click', async ()=>{
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if(outcome === 'accepted') showToast('جاري التثبيت…');
+  deferredPrompt = null;
+  document.getElementById('installBanner').classList.remove('show');
+});
+document.getElementById('ibNo').addEventListener('click', ()=>{
+  document.getElementById('installBanner').classList.remove('show');
+});
+window.addEventListener('appinstalled', ()=>{
+  showToast('تم تثبيت الخزنة');
+  document.getElementById('installBanner').classList.remove('show');
+});
+
+/* ---------- handle URL shortcuts (?action=lock / ?action=backup) ---------- */
+function handleShortcut(){
+  const params = new URLSearchParams(location.search);
+  const action = params.get('action');
+  if(action === 'lock') lockVault();
+  else if(action === 'backup' && cryptoKey) doBackup();
+}
+
+window.addEventListener('DOMContentLoaded', ()=>{
+  const store = loadStore();
+  if(store && store.salt){
+    document.getElementById('loginView').style.display = 'block';
+    document.getElementById('authSub').textContent = 'أدخل كلمة المرور الرئيسية لفتح خزنتك.';
+  } else {
+    document.getElementById('setupView').style.display = 'block';
+  }
+  // handle shortcut after login (deferred)
+  if(new URLSearchParams(location.search).get('action')){
+    window._pendingAction = new URLSearchParams(location.search).get('action');
+  }
+});
+
+async function doSetup(){
+  const p1 = document.getElementById('newMaster').value;
+  const p2 = document.getElementById('confirmMaster').value;
+  const err = document.getElementById('setupErr');
+  err.textContent = '';
+  if(p1.length < 8){ err.textContent = 'استخدم 8 أحرف على الأقل.'; return; }
+  if(p1 !== p2){ err.textContent = 'كلمتا المرور غير متطابقتين.'; return; }
+
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const saltB64 = b64e(salt);
+  cryptoKey = await deriveKey(p1, saltB64);
+  vault = [];
+  const {iv, ct} = await encryptVault();
+  if(!saveStore({salt:saltB64, iv, ct})){
+    err.textContent = 'تعذّر الحفظ محليًا في هذا المتصفح.'; return;
+  }
+  enterApp();
+}
+
+async function doLogin(){
+  const p = document.getElementById('loginMaster').value;
+  const err = document.getElementById('loginErr');
+  err.textContent = '';
+  const store = loadStore();
+  if(!store){ err.textContent = 'لا توجد خزنة محفوظة في هذا المتصفح.'; return; }
+  try{
+    cryptoKey = await deriveKey(p, store.salt);
+    const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv:b64d(store.iv)}, cryptoKey, b64d(store.ct));
+    vault = JSON.parse(new TextDecoder().decode(pt));
+    document.getElementById('loginMaster').value = '';
+    enterApp();
+    if(window._pendingAction === 'backup') doBackup();
+    window._pendingAction = null;
+  }catch(e){
+    err.textContent = 'كلمة المرور غير صحيحة.';
+  }
+}
+
+function enterApp(){
+  document.getElementById('auth').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('backupBtn').style.display = 'inline';
+  renderEntries();
+}
+
+async function doRestore(ev){
+  const file = ev.target.files[0];
+  ev.target.value = '';
+  if(!file) return;
+  const msg = document.getElementById('restoreMsg');
+  msg.style.color = '';
+  try{
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    if(!parsed.salt || !parsed.iv || !parsed.ct){
+      throw new Error('bad shape');
+    }
+    if(loadStore() && !confirm('توجد خزنة محفوظة بالفعل في هذا المتصفح. استبدالها بالنسخة الاحتياطية؟')){
+      return;
+    }
+    saveStore({salt: parsed.salt, iv: parsed.iv, ct: parsed.ct});
+    document.getElementById('setupView').style.display = 'none';
+    document.getElementById('loginView').style.display = 'block';
+    document.getElementById('authSub').textContent = 'تم استيراد النسخة الاحتياطية. أدخل كلمة مرورها الرئيسية لفتحها.';
+    msg.style.color = 'var(--accent)';
+    msg.textContent = 'تم الاستيراد بنجاح.';
+  }catch(e){
+    msg.style.color = 'var(--danger)';
+    msg.textContent = 'ملف النسخة الاحتياطية غير صالح.';
+  }
+}
+
+async function doBackup(){
+  if(!downloadsCap){
+    try{ downloadsCap = await claude.use('downloads'); }catch(e){}
+  }
+  if(!downloadsCap){
+    // Fallback: trigger a normal browser download of the encrypted blob
+    const store = loadStore();
+    if(!store){ showToast('لا توجد بيانات لحفظها'); return; }
+    const blob = new Blob([JSON.stringify(store, null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().slice(0,10);
+    a.href = URL.createObjectURL(blob);
+    a.download = `vault-backup-${stamp}.json`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    showToast('تم حفظ النسخة الاحتياطية');
+    return;
+  }
+  const store = loadStore();
+  if(!store){ showToast('لا توجد بيانات لحفظها'); return; }
+  const payload = JSON.stringify(store, null, 2);
+  const stamp = new Date().toISOString().slice(0,10);
+  try{
+    const res = await downloadsCap.save({ filename: `vault-backup-${stamp}.json`, data: payload });
+    if(res.status === 'saved') showToast('تم حفظ النسخة الاحتياطية');
+  }catch(e){
+    if(e && e.code === 'declined'){ /* user cancelled, no toast */ }
+    else showToast('تعذّر حفظ الملف');
+  }
+}
+
+function lockVault(){
+  cryptoKey = null; vault = [];
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('auth').style.display = 'block';
+  document.getElementById('setupView').style.display = 'none';
+  document.getElementById('loginView').style.display = 'block';
+  document.getElementById('loginErr').textContent = '';
+}
+
+function genPassword(){
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%&*';
+  const arr = crypto.getRandomValues(new Uint8Array(16));
+  let out = '';
+  for(const n of arr) out += chars[n % chars.length];
+  document.getElementById('newPass').value = out;
+}
+
+async function persist(){
+  const {iv, ct} = await encryptVault();
+  const store = loadStore();
+  saveStore({salt: store.salt, iv, ct});
+}
+
+async function addEntry(){
+  const site = document.getElementById('newSite').value.trim();
+  const name = document.getElementById('newName').value.trim();
+  const user = document.getElementById('newUser').value.trim();
+  const phone = document.getElementById('newPhone').value.trim();
+  const pass = document.getElementById('newPass').value;
+  if(!site || !pass){ showToast('أدخل اسم الموقع وكلمة المرور على الأقل'); return; }
+  vault.push({id: crypto.randomUUID(), site, name, user, phone, pass});
+  await persist();
+  document.getElementById('newSite').value = '';
+  document.getElementById('newName').value = '';
+  document.getElementById('newUser').value = '';
+  document.getElementById('newPhone').value = '';
+  document.getElementById('newPass').value = '';
+  renderEntries();
+  showToast('تمت الإضافة');
+}
+
+async function deleteEntry(id){
+  vault = vault.filter(e=>e.id!==id);
+  await persist();
+  renderEntries();
+  showToast('تم الحذف');
+}
+
+function togglePass(id){
+  const el = document.getElementById('pass-'+id);
+  const entry = vault.find(e=>e.id===id);
+  if(el.dataset.shown === '1'){
+    el.textContent = '•'.repeat(10);
+    el.dataset.shown = '0';
+  } else {
+    el.textContent = entry.pass;
+    el.dataset.shown = '1';
+  }
+}
+
+async function copyPass(id){
+  const entry = vault.find(e=>e.id===id);
+  try{
+    await navigator.clipboard.writeText(entry.pass);
+    showToast('تم نسخ كلمة المرور');
+  }catch(e){
+    showToast('تعذّر النسخ');
+  }
+}
+
+function renderEntries(){
+  const box = document.getElementById('entries');
+  if(vault.length === 0){
+    box.innerHTML = '<div class="empty">خزنتك فارغة. أضف أول حساب في الأعلى.</div>';
+    return;
+  }
+  box.innerHTML = vault.map(e => `
+    <div class="entry">
+      <div class="entry-top">
+        <div>
+          <div class="entry-site">${escapeHtml(e.site)}</div>
+          ${e.name ? `<div class="entry-user">${escapeHtml(e.name)}</div>` : ''}
+          ${e.user ? `<div class="entry-user">${escapeHtml(e.user)}</div>` : ''}
+          ${e.phone ? `<div class="entry-user">${escapeHtml(e.phone)}</div>` : ''}
+        </div>
+        <div class="entry-actions">
+          <button class="icon-btn" onclick="deleteEntry('${e.id}')" title="حذف">🗑</button>
+        </div>
+      </div>
+      <div class="entry-pass">
+        <span id="pass-${e.id}" data-shown="0">${'•'.repeat(10)}</span>
+        <span>
+          <button class="icon-btn" onclick="togglePass('${e.id}')" title="إظهار/إخفاء">👁</button>
+          <button class="icon-btn" onclick="copyPass('${e.id}')" title="نسخ">⧉</button>
+        </span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+</script>
+</body>
+</html>
